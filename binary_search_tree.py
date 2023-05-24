@@ -1,126 +1,61 @@
-class BinarySearchTreeNode:
+class BinaryTreeNode:
     def __init__(self, data):
         self.data = data
-        self.left = None
-        self.right = None
+        self.leftChild = None
+        self.rightChild = None
 
-    def add_child(self, data):
-        if data == self.data:
-            return # node already exist
-
-        if data < self.data:
-            if self.left:
-                self.left.add_child(data)
+    def insert(self, newValue):
+        # if binary search tree is empty, create a new node and declare it as root
+        if self is None:
+            self = BinaryTreeNode(newValue)
+            return self
+        # if newValue is less than value of data in root, add it to the left subtree and proceed recursively
+        if newValue < self.data:
+            if self.leftChild is None:
+                self.leftChild = BinaryTreeNode(newValue)
             else:
-                self.left = BinarySearchTreeNode(data)
+                self.leftChild.insert(newValue)
         else:
-            if self.right:
-                self.right.add_child(data)
+            # if newValue is greater than value of data in root, add it to the right subtree and proceed recursively
+            if self.rightChild is None:
+                self.rightChild = BinaryTreeNode(newValue)
             else:
-                self.right = BinarySearchTreeNode(data)
+                self.rightChild.insert(newValue)
 
-
-    def search(self, val):
-        if self.data == val:
+    def search(self, value):
+        # node is empty
+        if self is None:
+            return False
+        # if element is equal to the element to be searched
+        elif self.data == value:
             return True
-
-        if val < self.data:
-            if self.left:
-                return self.left.search(val)
-            else:
-                return False
-
-        if val > self.data:
-            if self.right:
-                return self.right.search(val)
-            else:
-                return False
-
-    def in_order_traversal(self):
-        elements = []
-        if self.left:
-            elements += self.left.in_order_traversal()
-
-        elements.append(self.data)
-
-        if self.right:
-            elements += self.right.in_order_traversal()
-
-        return elements
-    def pre_order_traversal(self):
-        elements = []
-        elements.append(self.data)
-
-        if self.left:
-            elements += self.left.pre_order_traversal()
-
-        if self.right:
-            elements += self.right.pre_order_traversal()
-
-        return elements
-
-    def post_order_traversal(self):
-        elements = []
-
-        if self.left:
-            elements += self.left.post_order_traversal()
-
-        if self.right:
-            elements += self.right.post_order_traversal()
-
-        elements.append(self.data)
-
-        return elements
-    
-
-    def delete(self, val):
-        if val < self.data:
-            if self.left:
-                self.left = self.left.delete(val)
-        elif val > self.data:
-            if self.right:
-                self.right = self.right.delete(val)
+        # element to be searched is less than the current node
+        elif self.data > value:
+            return self.leftChild.search(value) if self.leftChild else False
+        # element to be searched is greater than the current node
         else:
-            if self.left is None and self.right is None:
-                return None
-            elif self.left is None:
-                return self.right
-            elif self.right is None:
-                return self.left
+            return self.rightChild.search(value) if self.rightChild else False
 
-            min_val = self.right.find_min()
-            self.data = min_val
-            self.right = self.right.delete(min_val)
+    def inorder_traversal(self):
+        if self:
+            if self.leftChild:
+                self.leftChild.inorder_traversal()
+            print(self.data, end=" ")
+            if self.rightChild:
+                self.rightChild.inorder_traversal()
 
-        return self
+    def preorder_traversal(self):
+        if self:
+            print(self.data, end=" ")
+            if self.leftChild:
+                self.leftChild.preorder_traversal()
+            if self.rightChild:
+                self.rightChild.preorder_traversal()
 
-    def find_max(self):
-        if self.right is None:
-            return self.data
-        return self.right.find_max()
-
-    def find_min(self):
-        if self.left is None:
-            return self.data
-        return self.left.find_min()
-
-
-def build_tree(elements):
-    print("Building tree with these elements:",elements)
-    root = BinarySearchTreeNode(elements[0])
-
-    for i in range(1,len(elements)):
-        root.add_child(elements[i])
-
-    return root
-
-countries = ["India","Pakistan","Germany", "USA","China","India","UK","USA"]
-country_tree = build_tree(countries)
-
-print("UK is in the list? ", country_tree.search("UK"))
-print("Sweden is in the list? ", country_tree.search("Sweden"))
-
-numbers_tree = build_tree([17, 4, 1, 20, 9, 23, 18, 34])
-print("In order traversal gives this sorted list:",numbers_tree.in_order_traversal())
-print(f"pre = {numbers_tree.pre_order_traversal()}")
-print(f"post = {numbers_tree.post_order_traversal()}")
+    def postorder_traversal(self):
+        if self:
+            if self.leftChild:
+                self.leftChild.postorder_traversal()
+            if self.rightChild:
+                self.rightChild.postorder_traversal()
+            print(self.data, end=" ")
