@@ -59,3 +59,27 @@ class BinaryTreeNode:
             if self.rightChild:
                 self.rightChild.postorder_traversal()
             print(self.data, end=" ")
+# Create a new binary search tree
+root = BinaryTreeNode(5)
+
+# Insert values into the tree
+root.insert(3)
+root.insert(7)
+root.insert(2)
+root.insert(4)
+root.insert(9)
+
+# Perform inorder traversal
+print("Inorder traversal:")
+root.inorder_traversal()
+print()
+
+# Perform preorder traversal
+print("Preorder traversal:")
+root.preorder_traversal()
+print()
+
+# Perform postorder traversal
+print("Postorder traversal:")
+root.postorder_traversal()
+print()
